@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/clike/clike';
 
 function ProblemsPage() {
   const [code, setCode] = useState('');
@@ -11,16 +13,30 @@ function ProblemsPage() {
   const [error, setError] = useState('');
   const [input, setInput] = useState('');
 
-  useEffect(() => {
-    console.log('Code updated:', code);
-  }, [code]);
+  const starterCode = {
+    javascript: `// Write your code here\n`,
+    java: `import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n       // Write your code here\n    }\n}`,
+    python: `# Write your code here\n`,
+    'c++': `// Write a function to reverse a string\n#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nstring reverseString(string str) {\n    reverse(str.begin(), str.end());\n    return str;\n}\n\nint main() {\n    cout << reverseString("hello") << endl;\n    return 0;\n}`,
+  };
+
+  const handleLanguageChange = (e) => {
+    const selectedLanguage = e.target.value;
+    setLanguage(selectedLanguage);
+    setCode(starterCode[selectedLanguage] || '');
+  };
 
   const handleSubmit = async () => {
     setOutput('');
     setError('');
   
+    if (!code) {
+      setError('Please write some code before submitting.');
+      return;
+    }
+  
     try {
-      const response = await fetch('http://localhost:5000/execute', {
+      const response = await fetch(`http://localhost:5000/execute/${language}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -31,15 +47,16 @@ function ProblemsPage() {
       const result = await response.json();
   
       if (response.ok) {
-        setOutput(result.output);
+        setOutput(result.output || '');
         setError(result.error || '');
       } else {
-        setError(result.error || 'An error occurred');
+        setError(result.error || 'An error occurred.');
       }
     } catch (err) {
-      setError(err.message);
+      setError(`Failed to connect to the server: ${err.message}`);
     }
-  };  
+  };
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -49,7 +66,7 @@ function ProblemsPage() {
       </div>
       <div className="border rounded shadow-lg mb-4">
         <select
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={handleLanguageChange}
           value={language}
           className="mb-4 p-2 border rounded"
         >
