@@ -5,6 +5,10 @@ import ProblemsPage from './ProblemsPage';
 
 function App() {
   const [problem, setproblem] = useState(false);
+  const [score, setscore] = useState(0);
+  const handlesubmit = (data) => {
+    setscore(data);
+  }
   const features = [
     {
       title: "Practice Problems",
@@ -23,7 +27,7 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <header className="bg-gray-800 text-white py-4">
           <nav className="container mx-auto flex justify-between">
-            <div className="text-2xl font-bold">CodePlatform</div>
+            <div className="text-2xl font-bold">SkillSync</div>
             <ul className="flex space-x-4">
               <li onClick= {() => setproblem(false)}>
                 <Link to="/" className="hover:text-gray-300 transform">Home</Link>
@@ -34,6 +38,7 @@ function App() {
               <li onClick= {() => setproblem(false)}>
                 <Link to="/" className="hover:text-gray-300 transform">Contests</Link>
               </li>
+              <li>Score: {score}</li>
             </ul>
           </nav>
         </header>
@@ -57,7 +62,7 @@ function App() {
             </>
           )}
           <Routes>
-            <Route path="/problems" element={<ProblemsPage />} />
+            <Route path="/problems" element={<ProblemsPage onsubmit={handlesubmit}/>} />
           </Routes>
           
         </main>

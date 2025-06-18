@@ -6,7 +6,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/clike/clike';
 
-function ProblemsPage() {
+function ProblemsPage({onsubmit}) {
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('javascript');
   const [output, setOutput] = useState('');
@@ -48,6 +48,7 @@ function ProblemsPage() {
   
       if (response.ok) {
         setOutput(result.output || '');
+        onsubmit(80);
         setError(result.error || '');
       } else {
         setError(result.error || 'An error occurred.');
@@ -62,7 +63,66 @@ function ProblemsPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Solve Problems</h1>
       <div className="mb-6">
-        <p className="text-lg">Problem: Write a function to reverse a string.</p>
+        <span className="text-lg"><b>Problem Statement:</b> Sum of Even Numbers in a Range
+Write a program that calculates the sum of all even numbers in a given range [L, R] (inclusive).
+<br></br>
+<br></br>
+<b>Constraints:</b>
+<br></br>
+1. 1≤𝐿≤𝑅≤10^6
+<br></br>
+2. L and R are integers.
+<br></br><br></br>
+<b>Required Time Complexity:</b> O(n)
+<br></br>
+<b>Required Space Complexity:</b> O(1)
+<br></br>
+<b>Time Limit:</b> 1 second
+<br></br>
+<br></br>
+<b>Score of the Question:</b> 80
+<br></br>
+<br></br>
+<b>Rules:</b> 
+<br></br>
+Wrong Submission: -20,
+<br></br>
+Late Submission: -0, 
+<br></br>
+Compiling Error: -30,
+<br></br>
+Time Taken to Solve : 1 min,+10
+<br></br>
+<br></br>
+<b>Input:</b>
+<br></br>
+The first line contains an integer
+L, the starting number of the range.
+<br></br>
+The second line contains an integer 
+R, the ending number of the range.
+<br></br><br></br>
+<b>Output: </b>
+Print a single integer, the sum of all even numbers in the range [L, R].
+<br></br>
+<br></br>
+<b>Example Test Case:</b>
+<br></br>
+<b>Input:</b>
+<br></br>
+2
+6
+<br></br>
+<b>Output:</b>
+<br></br>
+12
+<br></br>
+<b>Explanation:</b>
+<br></br>
+Even numbers between 2 and 6 are 2,4, and 6.
+<br></br>
+Their sum is 2+4+6=12.
+</span>
       </div>
       <div className="border rounded shadow-lg mb-4">
         <select
